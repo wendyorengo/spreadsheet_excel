@@ -3,7 +3,7 @@ import Table from './components/layout'
 
 const App =() =>(
   <div style={{width: 'max-content'}}>
-    <Table x={4} y={4}/>
+    <Table x={15} y={20}/>
 
   </div>
 )

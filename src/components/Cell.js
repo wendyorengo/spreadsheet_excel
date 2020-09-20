@@ -135,6 +135,13 @@ export default class Cell extends React.Component {
     this.setState({ editing: true, selected: true })
   }
   determineDisplay = ({ x, y }, value) => {
+      if (value.slice(0,1) == '='){
+          const res = this.props.executeFormula({x,y}, value.slice(1))
+          if (res.error !== null){
+              return 'NULL'
+          }
+          return res.result
+      }
     return value
   }
   /**
