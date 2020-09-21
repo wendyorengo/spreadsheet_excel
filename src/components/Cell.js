@@ -135,13 +135,13 @@ export default class Cell extends React.Component {
     this.setState({ editing: true, selected: true })
   }
   determineDisplay = ({ x, y }, value) => {
-      if (value.slice(0,1) == '='){
-          const res = this.props.executeFormula({x,y}, value.slice(1))
-          if (res.error !== null){
-              return 'NULL'
-          }
-          return res.result
+    if (value.slice(0, 1) === '=') {
+      const res = this.props.executeFormula({ x, y }, value.slice(1))
+      if (res.error !== null) {
+        return 'INVALID'
       }
+      return res.result
+    }
     return value
   }
   /**
@@ -163,8 +163,8 @@ export default class Cell extends React.Component {
       fontSize: '14px',
       lineHeight: '15px',
       overflow: 'hidden',
-      fontFamily: 'Calibri, \'Segoe UI\', Thonburi,Arial,Verdana,sans-serif'
-        
+      fontFamily: 'Calibri, \'Segoe UI\', Thonburi,Arial,Verdana,sans-serif',
+       
     }
     if (this.props.x === 0 || this.props.y === 0) {
       css.textAlign = 'center'
