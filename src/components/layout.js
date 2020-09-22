@@ -1,6 +1,7 @@
 
 import React from 'react'
 import Row from './Row'
+import {render} from 'react-dom'
 import { Parser as FormulaParser } from 'hot-formula-parser'
 
 class Table extends React.Component {
@@ -9,6 +10,7 @@ class Table extends React.Component {
     this.state = {
       data: {}
     }
+ 
     this.parser = new FormulaParser()
     // When a formula contains a cell value, this event lets us
     // hook and return an error value if necessary
@@ -66,18 +68,20 @@ class Table extends React.Component {
       }
     })
   }
-  }
-
   handleChangedCell = ({ x, y }, value) => {
-    const newData = Object.assign({}, this.state.data)
-    if (!newData[y]) newData[y] = {}
-    newData[y][x] = value
-    this.setState({ data: newData })
+    const modifiedData = Object.assign({}, this.state.data)
+    if (!modifiedData[y]) modifiedData[y] = {}
+    modifiedData[y][x] = value
+    this.setState({ data: modifiedData })
   }
   updateCells = () => {
     this.forceUpdate()
   }
-
+  //...
+  /**
+   * Executes the formula on the `value` usign the
+   * FormulaParser object
+   */
   executeFormula = (cell, value) => {
     this.parser.cell = cell
     let res = this.parser.parse(value)
@@ -93,7 +97,8 @@ class Table extends React.Component {
     }
     return res
   }
-  render(); {
+    
+  render() {
     const rows = []
     for (let y = 0; y < this.props.y + 1; y += 1) {
       const rowData = this.state.data[y] || {}
@@ -108,9 +113,19 @@ class Table extends React.Component {
           rowData={rowData}
         />
       )
+     
+
     }
     return <div>{rows}</div>
-  }
+
+}
+
+
+
+}
+  
+
+  
 
 
 
