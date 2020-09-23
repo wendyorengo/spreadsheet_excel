@@ -12,27 +12,25 @@ class Table extends React.Component {
     }
  
     this.parser = new FormulaParser()
-    // When a formula contains a cell value, this event lets us
-    // hook and return an error value if necessary
+    
     this.parser.on('callCellValue', (cellCoord, done) => {
       const x = cellCoord.column.index + 1
       const y = cellCoord.row.index + 1
-      // Check if I have that coordinates tuple in the table range
+   
       if (x > this.props.x || y > this.props.y) {
         throw this.parser.Error(this.parser.ERROR_NOT_AVAILABLE)
       }
-      // Check that the cell is not self referencing
+     
       if (this.parser.cell.x === x && this.parser.cell.y === y) {
         throw this.parser.Error(this.parser.ERROR_REF)
       }
       if (!this.state.data[y] || !this.state.data[y][x]) {
         return done('')
       }
-      // All fine
+     
       return done(this.state.data[y][x])
     })
-    // When a formula contains a range value, this event lets us
-    // hook and return an error value if necessary
+   
     this.parser.on('callRangeValue',
       (startCellCoord, endCellCoord, done) => {
       const sx = startCellCoord.column.index + 1
@@ -77,22 +75,19 @@ class Table extends React.Component {
   updateCells = () => {
     this.forceUpdate()
   }
-  //...
-  /**
-   * Executes the formula on the `value` usign the
-   * FormulaParser object
-   */
+  
+  
   executeFormula = (cell, value) => {
     this.parser.cell = cell
     let res = this.parser.parse(value)
     if (res.error != null) {
-      return res // tip: returning `res.error` shows more details
+      return res 
     }
     if (res.result.toString() === '') {
       return res
     }
     if (res.result.toString().slice(0, 1) === '=') {
-      // formula points to formula
+      
       res = this.executeFormula(cell, res.result.slice(1))
     }
     return res
